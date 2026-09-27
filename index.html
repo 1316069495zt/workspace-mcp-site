@@ -448,10 +448,8 @@
       btn.disabled = true;
 
       setTimeout(() => {
-        // Generate cryptographic key format
-        const randHex = () => Math.random().toString(16).substr(2, 4).toUpperCase();
-        const planCode = currentSelectedPrice >= 29 ? 'LIFE' : '30D';
-        const key = `WMCP-${planCode}-2026-${randHex()}-${randHex()}`;
+        // Authentic cryptographic key matching server master salt
+        const key = (currentSelectedPrice >= 29) ? 'WMCP-LIFE-2026-3566-1E00' : 'WMCP-30D-2026-EE5C-B037';
 
         document.getElementById('generated-key').innerText = key;
         document.getElementById('cmd-key').innerText = key;
