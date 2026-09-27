@@ -198,8 +198,8 @@
       <div class="grid">
         <div class="card">
           <div class="card-icon">🪶</div>
-          <h3>Featherlight 35MB RAM</h3>
-          <p>Written in high-concurrency asynchronous Python. Up to 10x lighter and faster than bloated Node.js Electron tools.</p>
+          <h3>Featherlight ~35MB RAM</h3>
+          <p>High-performance asynchronous Python daemon. Starts in 0.5s with zero Electron bloat, perfect for headless servers, WSL2, and low-spec laptops.</p>
         </div>
         <div class="card">
           <div class="card-icon">⚡</div>
@@ -218,8 +218,8 @@
         </div>
         <div class="card">
           <div class="card-icon">🔐</div>
-          <h3>Strict Local-First Privacy</h3>
-          <p>Your source code never leaves your computer. AI interacts through single encrypted tool calls, compliant with GDPR and enterprise policies.</p>
+          <h3>Zero-Intermediary Privacy</h3>
+          <p>No third-party SaaS servers, no tracking telemetry, no code harvesting. Encrypted payloads stream directly between your local machine and your chosen AI model.</p>
         </div>
         <div class="card">
           <div class="card-icon">🌐</div>
@@ -248,7 +248,7 @@
           <tbody>
             <tr>
               <td><strong>Runtime Footprint</strong></td>
-              <td class="check">~35 MB (Single binary)</td>
+              <td class="check">~35 MB RAM (Async Daemon)</td>
               <td class="cross">Node.js + NPM (~250 MB)</td>
               <td>~60 MB + Agent</td>
               <td>~20 MB</td>
@@ -275,6 +275,13 @@
               <td class="cross">Broken pipes on sleep</td>
             </tr>
             <tr>
+              <td><strong>Security Architecture</strong></td>
+              <td class="check">Bearer Token + Chroot Path Sandbox</td>
+              <td>Local process permissions</td>
+              <td>Tunnel secret token</td>
+              <td>SSH Key authentication</td>
+            </tr>
+            <tr>
               <td><strong>Tool Arsenal</strong></td>
               <td class="check">12 Super-Tools (Tree, Git, Batch)</td>
               <td>5 Basic file tools</td>
@@ -283,6 +290,30 @@
             </tr>
           </tbody>
         </table>
+      </div>
+    </section>
+
+    <!-- Security & Trust Architecture -->
+    <section id="security" style="margin-bottom: 80px;">
+      <h2 class="section-title">Security by Architecture, Not Afterthought</h2>
+      <p class="section-sub">Exposing a dev environment to web AI requires uncompromising defense-in-depth.</p>
+
+      <div class="grid">
+        <div class="card">
+          <div class="card-icon">🛡️</div>
+          <h3>Cryptographic Bearer Auth</h3>
+          <p>Every single HTTP and SSE endpoint is guarded by a high-entropy 256-bit authentication token. Requests without matching Bearer headers or query tokens are dropped immediately with HTTP 401 Unauthorized.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🗂️</div>
+          <h3>Chrooted Path Sandbox</h3>
+          <p>All file system operations are strictly resolved against the designated workspace root. Directory traversal attacks (<code>../</code>, symlink hopping) to <code>~/.ssh</code> or <code>/etc/passwd</code> are strictly blocked and logged.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">⚙️</div>
+          <h3>Shell Execution Controls</h3>
+          <p>Command execution includes configurable per-process timeouts (default 30s) and head-tail log truncation. The terminal execution tool can be completely disabled on the fly via <code>enable_command_execution: false</code>.</p>
+        </div>
       </div>
     </section>
 
@@ -366,8 +397,8 @@
 
       <!-- Binance Pay Panel -->
       <div id="panel-binance" style="background: #11141e; border: 1px solid #f59e0b33; padding: 14px; border-radius: 8px; margin-bottom: 14px;">
-        <div style="font-size: 12px; color: #f59e0b; font-weight: bold; margin-bottom: 4px;">🚀 币安 Binance Pay / Binance ID (免任何手续费，秒级到账):</div>
-        <div style="font-size: 12px; color: #94a3b8; margin-bottom: 8px;">打开币安 App -> 首页右上角点击「Pay 支付」图标 -> 转账至此币安 ID:</div>
+        <div style="font-size: 12px; color: #f59e0b; font-weight: bold; margin-bottom: 4px;">🚀 Binance Pay / Binance ID (0 Fee, Instant Settlement):</div>
+        <div style="font-size: 12px; color: #94a3b8; margin-bottom: 8px;">Open Binance App -> Tap 'Pay' on the home screen -> Send to Binance User ID:</div>
         <div class="crypto-box" style="display: flex; justify-content: space-between; align-items: center; margin: 4px 0 8px;">
           <span id="binance-id-val" style="color: #facc15; font-size: 15px; font-weight: bold;">1208410810</span>
           <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('binance-id-val').innerText); this.innerText='Copied!'">Copy ID</button>
@@ -376,8 +407,8 @@
 
       <!-- BSC Panel -->
       <div id="panel-bsc" style="display: none; background: #11141e; border: 1px solid #38bdf833; padding: 14px; border-radius: 8px; margin-bottom: 14px;">
-        <div style="font-size: 12px; color: #38bdf8; font-weight: bold; margin-bottom: 4px;">⚡ BSC (Binance Smart Chain / BEP-20) 极低 Gas 费 (~$0.05):</div>
-        <div style="font-size: 12px; color: #94a3b8; margin-bottom: 8px;">从任何 Web3 钱包 (MetaMask, Trust, OKX) 转入 BSC 网络 USDT:</div>
+        <div style="font-size: 12px; color: #38bdf8; font-weight: bold; margin-bottom: 4px;">⚡ Binance Smart Chain (BSC / BEP-20) - Low Gas (~$0.05):</div>
+        <div style="font-size: 12px; color: #94a3b8; margin-bottom: 8px;">Send USDT over BEP-20 from any Web3 wallet (MetaMask, Trust, OKX):</div>
         <div class="crypto-box" style="display: flex; justify-content: space-between; align-items: center; margin: 4px 0 8px;">
           <span id="bsc-addr-val" style="color: #38bdf8; font-size: 12px; word-break: break-all;">0xb559a2d1febc37a90158e0a73966b9e28b3fbb53</span>
           <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('bsc-addr-val').innerText); this.innerText='Copied!'">Copy BSC</button>
@@ -386,8 +417,8 @@
 
       <!-- TRC20 Panel -->
       <div id="panel-trc" style="display: none; background: #11141e; border: 1px solid #232738; padding: 14px; border-radius: 8px; margin-bottom: 14px;">
-        <div style="font-size: 12px; color: #cbd5e1; font-weight: bold; margin-bottom: 4px;">波场 TRON (TRC-20) USDT:</div>
-        <div style="font-size: 12px; color: #94a3b8; margin-bottom: 8px;">转账 USDT (TRC-20) 至此地址:</div>
+        <div style="font-size: 12px; color: #cbd5e1; font-weight: bold; margin-bottom: 4px;">Tron Network (TRC-20) USDT:</div>
+        <div style="font-size: 12px; color: #94a3b8; margin-bottom: 8px;">Send USDT (TRC-20) to this receiving address:</div>
         <div class="crypto-box" style="display: flex; justify-content: space-between; align-items: center; margin: 4px 0 8px;">
           <span id="trc-addr-val" style="color: #cbd5e1; font-size: 12px; word-break: break-all;">TLMeT8UFvKbVEV2zWS46t8yCBtswNDy9Kk</span>
           <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('trc-addr-val').innerText); this.innerText='Copied!'">Copy TRC</button>
@@ -395,19 +426,19 @@
       </div>
 
       <div id="verify-step">
-        <label style="font-size: 12px; color: #94a3b8; display: block; margin-bottom: 6px;">转账完成后，输入币安订单号 / TXID 哈希 (或直接点击预览核验):</label>
-        <input type="text" id="txid-input" placeholder="输入转账凭据 (如: 19827361 或 0xabc...)" style="width: 100%; background: #000; border: 1px solid #334155; color: #fff; padding: 10px; border-radius: 6px; font-size: 13px; margin-bottom: 12px;" />
-        <button class="btn-buy btn-primary" id="btn-verify" onclick="autoVerifyAndDeliver()">⚡ 确认支付并立即生成专属激活码</button>
+        <label style="font-size: 12px; color: #94a3b8; display: block; margin-bottom: 6px;">After transfer, enter Binance Order ID / On-Chain TXID:</label>
+        <input type="text" id="txid-input" placeholder="e.g. 19827361 or 0xabc... (or leave blank to preview key)" style="width: 100%; background: #000; border: 1px solid #334155; color: #fff; padding: 10px; border-radius: 6px; font-size: 13px; margin-bottom: 12px;" />
+        <button class="btn-buy btn-primary" id="btn-verify" onclick="autoVerifyAndDeliver()">⚡ Confirm Payment & Generate License Key</button>
       </div>
 
       <div id="delivery-box" style="display: none; margin-top: 16px; background: #052e16; border: 1px solid #166534; padding: 16px; border-radius: 8px;">
-        <div style="color: #4ade80; font-weight: bold; margin-bottom: 6px;">🎉 付款核验通过！您的专属 Pro 授权密钥如下：</div>
+        <div style="color: #4ade80; font-weight: bold; margin-bottom: 6px;">🎉 Payment Confirmed! Your Authentic Pro License Key:</div>
         <div style="background: #000; padding: 10px; border-radius: 6px; font-family: monospace; font-size: 14px; color: #facc15; font-weight: bold; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-          <span id="generated-key">WMCP-LIFE-2026-F89A-4B21</span>
-          <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('generated-key').innerText); this.innerText='Copied!'">复制密钥</button>
+          <span id="generated-key">WMCP-LIFE-2026-3566-1E00</span>
+          <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('generated-key').innerText); this.innerText='Copied!'">Copy Key</button>
         </div>
-        <div style="font-size: 12px; color: #cbd5e1;">在终端执行此命令即可一秒激活 Pro 商业版：</div>
-        <code style="display: block; background: #000; color: #38bdf8; padding: 8px; border-radius: 4px; font-size: 12px; margin-top: 4px;">workspace-mcp license activate <span id="cmd-key">WMCP-LIFE-2026-F89A-4B21</span></code>
+        <div style="font-size: 12px; color: #cbd5e1;">Run this in your terminal to activate Pro instantly:</div>
+        <code style="display: block; background: #000; color: #38bdf8; padding: 8px; border-radius: 4px; font-size: 12px; margin-top: 4px;">workspace-mcp license activate <span id="cmd-key">WMCP-LIFE-2026-3566-1E00</span></code>
       </div>
     </div>
   </div>
