@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workspace MCP - The 35MB Local Dev Bridge for Claude & ChatGPT</title>
+  <meta name="description" content="Connect web AI models like Claude, ChatGPT, and Codex to your local development environment in 2 seconds. Lightweight, cross-platform, 12 built-in tools.">
+  <style>
+    :root {
+      --bg: #090a0f;
+      --card-bg: #12141c;
+      --border: #232738;
+      --accent: #3b82f6;
+      --accent-glow: rgba(59, 130, 246, 0.25);
+      --green: #10b981;
+      --purple: #8b5cf6;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
+    
+    .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+    header { padding: 24px 0; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
+    .logo { font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 8px; color: #fff; text-decoration: none; }
+    .logo-badge { background: #1e293b; color: #60a5fa; font-size: 11px; padding: 2px 8px; border-radius: 12px; border: 1px solid #3b82f6; }
+    nav a { color: var(--text-muted); text-decoration: none; margin-left: 20px; font-size: 14px; transition: color 0.2s; }
+    nav a:hover { color: #fff; }
+    .btn-nav { background: var(--accent); color: #fff; padding: 8px 16px; border-radius: 6px; font-weight: 500; }
+
+    /* Hero */
+    .hero { text-align: center; padding: 80px 0 60px; }
+    .hero-pill { display: inline-flex; align-items: center; gap: 8px; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); padding: 6px 14px; border-radius: 20px; font-size: 12px; color: #93c5fd; margin-bottom: 24px; }
+    .hero-pill span { width: 8px; height: 8px; border-radius: 50%; background: #10b981; display: inline-block; }
+    h1 { font-size: 52px; font-weight: 800; line-height: 1.15; margin-bottom: 20px; letter-spacing: -0.02em; }
+    h1 span { background: linear-gradient(135deg, #60a5fa, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero p { font-size: 19px; color: var(--text-muted); max-width: 720px; margin: 0 auto 36px; }
+    
+    /* Code box */
+    .install-box { max-width: 620px; margin: 0 auto 48px; background: #000; border: 1px solid var(--border); border-radius: 10px; padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+    .install-box code { color: #4ade80; font-family: monospace; font-size: 14px; }
+    .copy-btn { background: #1e293b; color: #fff; border: 1px solid #334155; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; }
+    .copy-btn:hover { background: #334155; }
+
+    /* Terminal Demo Mockup */
+    .demo-window { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.6); margin-bottom: 80px; }
+    .demo-header { background: #1a1d29; padding: 12px 16px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--border); }
+    .dot { width: 12px; height: 12px; border-radius: 50%; }
+    .dot-red { background: #ef4444; } .dot-yellow { background: #f59e0b; } .dot-green { background: #10b981; }
+    .demo-title { font-size: 12px; color: var(--text-muted); margin-left: 12px; font-family: monospace; }
+    .demo-body { padding: 24px; font-family: monospace; font-size: 13px; line-height: 1.6; color: #cbd5e1; }
+    .term-prompt { color: #60a5fa; }
+    .term-hl { color: #facc15; }
+    .term-success { color: #4ade80; }
+
+    /* Features Grid */
+    .section-title { text-align: center; font-size: 32px; font-weight: 700; margin-bottom: 12px; }
+    .section-sub { text-align: center; color: var(--text-muted); margin-bottom: 48px; }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 80px; }
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 28px; transition: transform 0.2s, border-color 0.2s; }
+    .card:hover { transform: translateY(-4px); border-color: #3b82f6; }
+    .card-icon { font-size: 28px; margin-bottom: 16px; }
+    .card h3 { font-size: 18px; margin-bottom: 10px; }
+    .card p { color: var(--text-muted); font-size: 14px; }
+
+    /* Comparison Table */
+    .compare-wrap { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; overflow-x: auto; margin-bottom: 80px; }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; }
+    th, td { padding: 16px 20px; border-bottom: 1px solid var(--border); }
+    th { background: #161925; color: var(--text-muted); font-weight: 600; }
+    tr:last-child td { border-bottom: none; }
+    .check { color: #10b981; font-weight: bold; }
+    .cross { color: #ef4444; }
+
+    /* Pricing */
+    .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 80px; }
+    .price-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px; padding: 36px 28px; position: relative; }
+    .price-card.featured { border-color: #3b82f6; box-shadow: 0 0 40px rgba(59, 130, 246, 0.2); }
+    .badge-pop { position: absolute; top: -12px; right: 24px; background: #3b82f6; color: #fff; font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 20px; }
+    .price-val { font-size: 42px; font-weight: 800; margin: 16px 0; }
+    .price-val span { font-size: 16px; font-weight: 400; color: var(--text-muted); }
+    .price-features { list-style: none; margin: 24px 0 32px; font-size: 14px; }
+    .price-features li { margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .btn-buy { display: block; width: 100%; text-align: center; padding: 12px; border-radius: 8px; font-weight: 600; text-decoration: none; cursor: pointer; border: none; }
+    .btn-primary { background: #3b82f6; color: #fff; }
+    .btn-primary:hover { background: #2563eb; }
+    .btn-outline { background: transparent; border: 1px solid #334155; color: #fff; }
+    .btn-outline:hover { background: #1e293b; }
+
+    /* Modal */
+    .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 999; align-items: center; justify-content: center; padding: 20px; }
+    .modal-box { background: #181b26; border: 1px solid var(--border); border-radius: 12px; max-width: 480px; width: 100%; padding: 28px; position: relative; }
+    .modal-close { position: absolute; top: 16px; right: 16px; color: #888; font-size: 20px; cursor: pointer; border: none; background: none; }
+    .crypto-box { background: #0b0d14; border: 1px solid #232738; padding: 14px; border-radius: 8px; font-family: monospace; font-size: 12px; word-break: break-all; margin: 12px 0; color: #38bdf8; }
+
+    footer { text-align: center; padding: 40px 0; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px; }
+
+    @media (max-width: 768px) {
+      h1 { font-size: 34px; }
+      .grid, .pricing-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <a href="#" class="logo">
+        ⚡ Workspace MCP <span class="logo-badge">v1.4.0</span>
+      </a>
+      <nav>
+        <a href="#features">Features</a>
+        <a href="#comparison">Compare</a>
+        <a href="#pricing">Pricing</a>
+        <a href="https://github.com/1316069495zt/workspace-mcp" target="_blank">GitHub ⭐</a>
+        <a href="#pricing" class="btn-nav">Get Pro Lifetime</a>
+      </nav>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-pill">
+        <span></span> Official MCP 2024-11-05 Protocol Verified
+      </div>
+      <h1>Bridge Claude & ChatGPT to<br><span>Your Local Machine in 2s</span></h1>
+      <p>The ultra-lightweight (35MB RAM) remote dev environment for web AI models. Run shell commands, inspect git status, edit code, and scan repos with zero latency.</p>
+
+      <div class="install-box">
+        <code>$ curl -fsSL https://raw.githubusercontent.com/1316069495zt/workspace-mcp/main/get.sh | bash</code>
+        <button class="copy-btn" onclick="navigator.clipboard.writeText('curl -fsSL https://raw.githubusercontent.com/1316069495zt/workspace-mcp/main/get.sh | bash'); this.innerText='Copied!'">Copy</button>
+      </div>
+
+      <!-- Live Mockup -->
+      <div class="demo-window">
+        <div class="demo-header">
+          <div class="dot dot-red"></div>
+          <div class="dot dot-yellow"></div>
+          <div class="dot dot-green"></div>
+          <div class="demo-title">workspace-mcp daemon --bg</div>
+        </div>
+        <div class="demo-body">
+          <div><span class="term-prompt">user@devbox:~$</span> <span class="term-hl">workspace-mcp --bg</span></div>
+          <div><span class="term-success">🟢 Status:</span> Running in background (PID: 2841) | HTTP/2 Tunnel Active</div>
+          <div><span class="term-success">📁 Bound Directory:</span> /home/user/my-kernel-project</div>
+          <div><span class="term-success">⚡ Direct AI URL:</span> https://secure-tunnel.trycloudflare.com/mcp/8d7b3328fb9ec30e8ec207af8850db6d</div>
+          <br>
+          <div style="color: #64748b;">// 1. Paste the two-line prompt to web Claude / ChatGPT / Cursor:</div>
+          <div style="background: #090a0f; padding: 12px; border-left: 3px solid #3b82f6; border-radius: 4px; margin: 8px 0;">
+            https://secure-tunnel.trycloudflare.com/mcp/8d7b3328fb9ec30e8ec207af8850db6d<br><br>
+            Connect to this MCP endpoint, inspect project structure, and prepare for our development task.
+          </div>
+          <div style="color: #38bdf8;">[13:24:02] Remote Claude invoked `get_directory_tree` -> Returned 42 files across 4 directories</div>
+          <div style="color: #38bdf8;">[13:24:05] Remote Claude invoked `execute_command("make -j8")` -> Build Succeeded (0.8s)</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features">
+      <h2 class="section-title">Engineered for Demanding Developers</h2>
+      <p class="section-sub">Stop copying code back and forth. Let AI operate directly inside your true environment.</p>
+
+      <div class="grid">
+        <div class="card">
+          <div class="card-icon">🪶</div>
+          <h3>Featherlight 35MB RAM</h3>
+          <p>Written in high-concurrency asynchronous Python. Up to 10x lighter and faster than bloated Node.js Electron tools.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">⚡</div>
+          <h3>12 Supercharged Tools</h3>
+          <p>Includes fast ripgrep searching, visual directory tree, git status parsing, batch parallel operations, and terminal execution.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🛡️</div>
+          <h3>Watchdog Auto-Healing</h3>
+          <p>Built-in HTTP/2 watchdog detects Wi-Fi changes and laptop wake events, automatically reconnecting the tunnel within 8 seconds.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">💻</div>
+          <h3>Web-Based VS Code IDE</h3>
+          <p>Monitor live AI invocations, edit files with syntax highlighting, and run terminal commands directly from any browser or tablet.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔐</div>
+          <h3>Strict Local-First Privacy</h3>
+          <p>Your source code never leaves your computer. AI interacts through single encrypted tool calls, compliant with GDPR and enterprise policies.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🌐</div>
+          <h3>Universal Cross-Platform</h3>
+          <p>Native support for Linux, macOS, WSL2, and Windows. No root or Docker daemon required.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Comparison Table -->
+    <section id="comparison">
+      <h2 class="section-title">How Does It Compare?</h2>
+      <p class="section-sub">Why elite developers choose Workspace MCP over traditional open-source tools.</p>
+
+      <div class="compare-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>Workspace MCP</th>
+              <th>Official MCP Filesystem</th>
+              <th>ngrok + Stdio Server</th>
+              <th>SSH Port Forwarding</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Runtime Footprint</strong></td>
+              <td class="check">~35 MB (Single binary)</td>
+              <td class="cross">Node.js + NPM (~250 MB)</td>
+              <td>~60 MB + Agent</td>
+              <td>~20 MB</td>
+            </tr>
+            <tr>
+              <td><strong>Public Web AI Access</strong></td>
+              <td class="check">Zero-Config HTTP/2 Tunnel</td>
+              <td class="cross">Local Stdio only (No Tunnel)</td>
+              <td>Manual Auth & Tunneling</td>
+              <td>Requires Static Public IP</td>
+            </tr>
+            <tr>
+              <td><strong>Web IDE & Live Audit</strong></td>
+              <td class="check">Yes (Built-in VS Code GUI)</td>
+              <td class="cross">Headless (No GUI)</td>
+              <td class="cross">No GUI</td>
+              <td class="cross">No GUI</td>
+            </tr>
+            <tr>
+              <td><strong>Auto-Healing Watchdog</strong></td>
+              <td class="check">Yes (HTTP/2 Daemon)</td>
+              <td class="cross">No (Dies on disconnect)</td>
+              <td class="cross">Requires external scripts</td>
+              <td class="cross">Broken pipes on sleep</td>
+            </tr>
+            <tr>
+              <td><strong>Tool Arsenal</strong></td>
+              <td class="check">12 Super-Tools (Tree, Git, Batch)</td>
+              <td>5 Basic file tools</td>
+              <td>Dependent on server</td>
+              <td>Raw terminal only</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing">
+      <h2 class="section-title">Transparent, Developer-Friendly Pricing</h2>
+      <p class="section-sub">No recurring traps. Pay once, own forever. Supports USD Credit Cards & Crypto USDT.</p>
+
+      <div class="pricing-grid">
+        <!-- Community -->
+        <div class="price-card">
+          <h3>Community</h3>
+          <p style="color: #94a3b8; font-size: 13px;">For hobbyists & tinkering</p>
+          <div class="price-val">$0 <span>/ forever</span></div>
+          <ul class="price-features">
+            <li>✓ All 12 MCP Core Tools</li>
+            <li>✓ Dynamic Cloudflare Tunnel</li>
+            <li>✓ Web IDE & Live Activity Log</li>
+            <li>✓ Community GitHub Support</li>
+          </ul>
+          <a href="https://github.com/1316069495zt/workspace-mcp" class="btn-buy btn-outline">Install Free</a>
+        </div>
+
+        <!-- Pro Lifetime -->
+        <div class="price-card featured">
+          <div class="badge-pop">MOST POPULAR</div>
+          <h3>Pro Lifetime</h3>
+          <p style="color: #94a3b8; font-size: 13px;">For professional engineers</p>
+          <div class="price-val">$19 <span>/ one-time</span></div>
+          <ul class="price-features">
+            <li>✓ <strong>Everything in Free</strong></li>
+            <li>✓ <strong>Custom Subdomain</strong> (Stable endpoint)</li>
+            <li>✓ <strong>Multi-Workspace Hot Switcher</strong></li>
+            <li>✓ <strong>Command Safety Shield</strong> (rm -rf guard)</li>
+            <li>✓ <strong>Lifetime Updates & License Key</strong></li>
+          </ul>
+          <button class="btn-buy btn-primary" onclick="openCheckout('Pro Lifetime', 19)">Buy with Card / USDT ($19)</button>
+        </div>
+
+        <!-- Team -->
+        <div class="price-card">
+          <h3>Team Pack</h3>
+          <p style="color: #94a3b8; font-size: 13px;">For remote dev squads</p>
+          <div class="price-val">$49 <span>/ 5 seats</span></div>
+          <ul class="price-features">
+            <li>✓ <strong>5 x Pro Lifetime Licenses</strong></li>
+            <li>✓ <strong>Centralized Audit Log Export</strong></li>
+            <li>✓ <strong>Dedicated Anycast Relay Node</strong></li>
+            <li>✓ <strong>Priority Discord / Email Support</strong></li>
+          </ul>
+          <button class="btn-buy btn-outline" onclick="openCheckout('Team Pack', 49)">Buy Team Pack ($49)</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p>© 2026 Workspace MCP Project. Crafted with precision for global developers. Open-core architecture.</p>
+    </footer>
+  </div>
+
+  <!-- Checkout Modal -->
+  <div class="modal" id="checkout-modal">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeCheckout()">✕</button>
+      <h3 style="margin-bottom: 8px;" id="modal-plan-title">Checkout Pro Lifetime</h3>
+      <p style="color: #94a3b8; font-size: 13px; margin-bottom: 20px;">Instant digital delivery of License Key to your email.</p>
+
+      <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+        <button class="btn-buy btn-primary" style="flex: 1; font-size: 13px;" onclick="switchPay('card')">💳 Credit Card / Apple Pay</button>
+        <button class="btn-buy btn-outline" style="flex: 1; font-size: 13px;" onclick="switchPay('crypto')">🪙 Pay with USDT</button>
+      </div>
+
+      <!-- Card Box (LemonSqueezy) -->
+      <div id="pay-card-section">
+        <p style="color: #cbd5e1; font-size: 13px; margin-bottom: 14px;">Pay securely via Stripe / LemonSqueezy with global Visa, Mastercard, or Apple Pay:</p>
+        <button class="btn-buy btn-primary" style="background: #10b981;" onclick="alert('Redirecting to LemonSqueezy / Stripe Secure Checkout...')">
+          Proceed to Card Payment (<span id="modal-card-price">$19</span>)
+        </button>
+      </div>
+
+      <!-- Crypto Box -->
+      <div id="pay-crypto-section" style="display: none;">
+        <p style="color: #cbd5e1; font-size: 13px;">Send exact USDT (TRC-20 or ERC-20) to this address:</p>
+        <div class="crypto-box" id="crypto-addr">TX8fK29x...94ZbJk72qP1 (TRC-20 USDT)</div>
+        <input type="text" placeholder="Enter your transaction TXID hash..." style="width: 100%; background: #000; border: 1px solid #334155; color: #fff; padding: 10px; border-radius: 6px; font-size: 13px; margin-bottom: 12px;" />
+        <button class="btn-buy btn-primary" onclick="alert('TXID received! License key will be activated instantly once confirmed on-chain.')">
+          Verify Payment & Get License Key
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openCheckout(plan, price) {
+      document.getElementById('modal-plan-title').innerText = 'Checkout ' + plan;
+      document.getElementById('modal-card-price').innerText = '$' + price;
+      document.getElementById('checkout-modal').style.display = 'flex';
+    }
+    function closeCheckout() {
+      document.getElementById('checkout-modal').style.display = 'none';
+    }
+    function switchPay(mode) {
+      document.getElementById('pay-card-section').style.display = (mode === 'card') ? 'block' : 'none';
+      document.getElementById('pay-crypto-section').style.display = (mode === 'crypto') ? 'block' : 'none';
+    }
+  </script>
+</body>
+</html>
