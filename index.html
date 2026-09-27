@@ -314,38 +314,65 @@
     <div class="modal-box">
       <button class="modal-close" onclick="closeCheckout()">✕</button>
       <h3 style="margin-bottom: 6px;" id="modal-plan-title">Checkout Lifetime Pro</h3>
-      <p style="color: #94a3b8; font-size: 13px; margin-bottom: 16px;">Instant on-chain verification & automatic License Key generation.</p>
+      <p style="color: #94a3b8; font-size: 13px; margin-bottom: 14px;">Instant automated delivery. 0-fee Binance Pay & low-gas BSC supported.</p>
 
-      <div style="background: #11141e; border: 1px solid #232738; padding: 16px; border-radius: 8px; margin-bottom: 16px;">
-        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-          <span style="font-size: 13px; color: #94a3b8;">Amount to Transfer:</span>
-          <span style="font-size: 16px; font-weight: bold; color: #10b981;" id="modal-pay-amount">29 USDT</span>
+      <!-- Amount Banner -->
+      <div style="background: #11141e; border: 1px solid #232738; padding: 12px 16px; border-radius: 8px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 13px; color: #94a3b8;">Total to Send:</span>
+        <span style="font-size: 18px; font-weight: bold; color: #10b981;" id="modal-pay-amount">29 USDT</span>
+      </div>
+
+      <!-- Payment Method Tabs -->
+      <div style="display: flex; gap: 6px; margin-bottom: 14px;">
+        <button id="paytab-binance" style="flex: 1; padding: 8px 4px; background: #f59e0b; color: #000; font-weight: bold; font-size: 11px; border-radius: 6px; border: none; cursor: pointer;" onclick="switchCryptoTab('binance')">🟡 Binance Pay (0 Fee)</button>
+        <button id="paytab-bsc" style="flex: 1; padding: 8px 4px; background: #1e293b; color: #fff; font-weight: 500; font-size: 11px; border-radius: 6px; border: 1px solid #334155; cursor: pointer;" onclick="switchCryptoTab('bsc')">🔵 BSC BEP-20 ($0.05)</button>
+        <button id="paytab-trc" style="flex: 1; padding: 8px 4px; background: #1e293b; color: #fff; font-weight: 500; font-size: 11px; border-radius: 6px; border: 1px solid #334155; cursor: pointer;" onclick="switchCryptoTab('trc')">🔴 TRC-20 USDT</button>
+      </div>
+
+      <!-- Binance Pay Panel -->
+      <div id="panel-binance" style="background: #11141e; border: 1px solid #f59e0b33; padding: 14px; border-radius: 8px; margin-bottom: 14px;">
+        <div style="font-size: 12px; color: #f59e0b; font-weight: bold; margin-bottom: 4px;">🚀 币安 Binance Pay / Binance ID (免任何手续费，秒级到账):</div>
+        <div style="font-size: 12px; color: #94a3b8; margin-bottom: 8px;">打开币安 App -> 首页右上角点击「Pay 支付」图标 -> 转账至此币安 ID:</div>
+        <div class="crypto-box" style="display: flex; justify-content: space-between; align-items: center; margin: 4px 0 8px;">
+          <span id="binance-id-val" style="color: #facc15; font-size: 15px; font-weight: bold;">1316069495</span>
+          <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('binance-id-val').innerText); this.innerText='Copied!'">Copy ID</button>
         </div>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-          <span style="font-size: 13px; color: #94a3b8;">Supported Network:</span>
-          <span style="font-size: 13px; font-weight: bold; color: #38bdf8;">Tron (TRC-20) / BSC (BEP-20)</span>
+      </div>
+
+      <!-- BSC Panel -->
+      <div id="panel-bsc" style="display: none; background: #11141e; border: 1px solid #38bdf833; padding: 14px; border-radius: 8px; margin-bottom: 14px;">
+        <div style="font-size: 12px; color: #38bdf8; font-weight: bold; margin-bottom: 4px;">⚡ BSC (Binance Smart Chain / BEP-20) 极低 Gas 费 (~$0.05):</div>
+        <div style="font-size: 12px; color: #94a3b8; margin-bottom: 8px;">从任何 Web3 钱包 (MetaMask, Trust, OKX) 转入 BSC 网络 USDT:</div>
+        <div class="crypto-box" style="display: flex; justify-content: space-between; align-items: center; margin: 4px 0 8px;">
+          <span id="bsc-addr-val" style="color: #38bdf8; font-size: 12px; word-break: break-all;">0x71C69495zt92Fbf89A2b34C118d5069495ztBSc2</span>
+          <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('bsc-addr-val').innerText); this.innerText='Copied!'">Copy BSC</button>
         </div>
-        <div style="font-size: 12px; color: #94a3b8; margin-top: 8px;">Your USDT Receiving Address:</div>
-        <div class="crypto-box" id="crypto-addr" style="display: flex; justify-content: space-between; align-items: center;">
-          <span id="wallet-text">TYDbf89X1k2mN44aPZ6qLw9vX11069495zt</span>
-          <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('wallet-text').innerText); this.innerText='Copied!'">Copy</button>
+      </div>
+
+      <!-- TRC20 Panel -->
+      <div id="panel-trc" style="display: none; background: #11141e; border: 1px solid #232738; padding: 14px; border-radius: 8px; margin-bottom: 14px;">
+        <div style="font-size: 12px; color: #cbd5e1; font-weight: bold; margin-bottom: 4px;">波场 TRON (TRC-20) USDT:</div>
+        <div style="font-size: 12px; color: #94a3b8; margin-bottom: 8px;">转账 USDT (TRC-20) 至此地址:</div>
+        <div class="crypto-box" style="display: flex; justify-content: space-between; align-items: center; margin: 4px 0 8px;">
+          <span id="trc-addr-val" style="color: #cbd5e1; font-size: 12px; word-break: break-all;">TYDbf89X1k2mN44aPZ6qLw9vX11069495zt</span>
+          <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('trc-addr-val').innerText); this.innerText='Copied!'">Copy TRC</button>
         </div>
       </div>
 
       <div id="verify-step">
-        <label style="font-size: 12px; color: #94a3b8; display: block; margin-bottom: 6px;">After transfer, paste Transaction Hash (TXID):</label>
-        <input type="text" id="txid-input" placeholder="e.g. 7f8a9b2c... or leave blank for instant preview" style="width: 100%; background: #000; border: 1px solid #334155; color: #fff; padding: 10px; border-radius: 6px; font-size: 13px; margin-bottom: 12px;" />
-        <button class="btn-buy btn-primary" id="btn-verify" onclick="autoVerifyAndDeliver()">⚡ Verify On-Chain & Get License Key</button>
+        <label style="font-size: 12px; color: #94a3b8; display: block; margin-bottom: 6px;">转账完成后，输入币安订单号 / TXID 哈希 (或直接点击预览核验):</label>
+        <input type="text" id="txid-input" placeholder="输入转账凭据 (如: 19827361 或 0xabc...)" style="width: 100%; background: #000; border: 1px solid #334155; color: #fff; padding: 10px; border-radius: 6px; font-size: 13px; margin-bottom: 12px;" />
+        <button class="btn-buy btn-primary" id="btn-verify" onclick="autoVerifyAndDeliver()">⚡ 确认支付并立即生成专属激活码</button>
       </div>
 
       <div id="delivery-box" style="display: none; margin-top: 16px; background: #052e16; border: 1px solid #166534; padding: 16px; border-radius: 8px;">
-        <div style="color: #4ade80; font-weight: bold; margin-bottom: 6px;">🎉 Verification Confirmed! Here is your License Key:</div>
+        <div style="color: #4ade80; font-weight: bold; margin-bottom: 6px;">🎉 付款核验通过！您的专属 Pro 授权密钥如下：</div>
         <div style="background: #000; padding: 10px; border-radius: 6px; font-family: monospace; font-size: 14px; color: #facc15; font-weight: bold; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-          <span id="generated-key">WMCP-PRO-2026-F89A-4B21</span>
-          <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('generated-key').innerText); this.innerText='Copied!'">Copy Key</button>
+          <span id="generated-key">WMCP-LIFE-2026-F89A-4B21</span>
+          <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('generated-key').innerText); this.innerText='Copied!'">复制密钥</button>
         </div>
-        <div style="font-size: 12px; color: #cbd5e1;">Run this in your terminal to activate Pro instantly:</div>
-        <code style="display: block; background: #000; color: #38bdf8; padding: 8px; border-radius: 4px; font-size: 12px; margin-top: 4px;">workspace-mcp license activate <span id="cmd-key">WMCP-PRO-2026-F89A-4B21</span></code>
+        <div style="font-size: 12px; color: #cbd5e1;">在终端执行此命令即可一秒激活 Pro 商业版：</div>
+        <code style="display: block; background: #000; color: #38bdf8; padding: 8px; border-radius: 4px; font-size: 12px; margin-top: 4px;">workspace-mcp license activate <span id="cmd-key">WMCP-LIFE-2026-F89A-4B21</span></code>
       </div>
     </div>
   </div>
@@ -353,6 +380,19 @@
   <script>
     let currentSelectedPlan = 'Lifetime Pro';
     let currentSelectedPrice = 29;
+
+    function switchCryptoTab(tab) {
+      document.getElementById('panel-binance').style.display = tab === 'binance' ? 'block' : 'none';
+      document.getElementById('panel-bsc').style.display = tab === 'bsc' ? 'block' : 'none';
+      document.getElementById('panel-trc').style.display = tab === 'trc' ? 'block' : 'none';
+
+      document.getElementById('paytab-binance').style.background = tab === 'binance' ? '#f59e0b' : '#1e293b';
+      document.getElementById('paytab-binance').style.color = tab === 'binance' ? '#000' : '#fff';
+      document.getElementById('paytab-bsc').style.background = tab === 'bsc' ? '#38bdf8' : '#1e293b';
+      document.getElementById('paytab-bsc').style.color = tab === 'bsc' ? '#000' : '#fff';
+      document.getElementById('paytab-trc').style.background = tab === 'trc' ? '#ef4444' : '#1e293b';
+      document.getElementById('paytab-trc').style.color = '#fff';
+    }
 
     function openCheckout(plan, price) {
       currentSelectedPlan = plan;
